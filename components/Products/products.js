@@ -54,17 +54,17 @@ class Products{
         //+деструктуризация 
         CATALOG.forEach(({ id, productName, img, price, description})=>{
             htmlCatalog += 
-            `<li>
-                <img src="${img}"/>
-                <span>${productName}</span>
-                <span>${price}</span>
-                <button>Add to Cart</button>
+            `<li class="products_element">
+                <img src="${img}" class="products_element__img"/>
+                <span class="products_element__name">${productName}</span>
+                <span class="products_element__price">${price.toLocaleString()} EUR</span>
+                <button class="products_element__btn">Add to Cart</button>
             </li>`
              
         });
 
         const html = 
-        `<ul>
+        `<ul class="products_container">
             ${htmlCatalog}
         </ul>`
         
