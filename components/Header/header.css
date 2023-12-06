@@ -1,0 +1,32 @@
+.header_container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 50px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+.header_title {
+
+}
+
+.header_title span {
+    color: #A18A68;
+}
+
+.header_flexbox_icons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 25%;
+}
+
+.header_flexbox_info {
+    
+}
+
+.header_counter{
+
+}

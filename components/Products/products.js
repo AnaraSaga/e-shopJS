@@ -1,4 +1,6 @@
 //import { CATALOG } from './constants/catalog';
+//import {LocalStorageUtil} from ".utilits/localStorageUtils";
+
 //------------CATALOG---------------
 const CATALOG = [
     {
@@ -83,8 +85,8 @@ console.log(localStorageUtil.getProducts());
 class Products{
     constructor(){
         this.classNameActive = "products_element__btn_active";
-        this.labelAdd = "Add to Card";
-        this.labelRemove = "Remove from Card";
+        this.labelAdd = "Add to Cart";
+        this.labelRemove = "Remove from Cart";
     }
 
     //метод отоброжает данные на страничке в виде HTML
@@ -110,13 +112,12 @@ class Products{
             `<li class="products_element">
                 <img src="${img}" class="products_element__img"/>
                 <span class="products_element__name">${productName}</span>
-                <span class="products_element__price">${price.toLocaleString()} EUR</span>
+                <span class="products_element__price">${price.toLocaleString()}EUR</span>
                 <button id = "productBtn_${id}" class="products_element__btn ${activeClass}">
                     ${activeText}
                 </button>
             </li>`  
         });
-        //onclick="productsPage.handleSetLocationStorage(this, '${id}');" 
     
         const html = 
         `<ul class="products_container">
@@ -126,22 +127,27 @@ class Products{
         const ROOT_PRODUCTS = document.getElementById("products");
         ROOT_PRODUCTS.innerHTML = html;
     
-        // событие на кнопке
+        // обрабатываем событие на кнопке
         CATALOG.forEach(({ id }) => {
+            //console.log(id)
             const btn = document.getElementById(`productBtn_${id}`);
+            //console.log(btn)
+            
             btn.addEventListener("click", ()=> {
                 const { pushProduct, products } = localStorageUtil.putPtoducts(id);
-                if (pushProduct) {
-                    btn.classList.add(productsPage.classNameActive);
+                if (!pushProduct) {
+                    btn.classList.remove(productsPage.classNameActive);
                     btn.innerHTML = productsPage.labelAdd;
                 } else {
-                    btn.classList.remove(productsPage.classNameActive);
+                    btn.classList.add(productsPage.classNameActive);
                     btn.innerHTML = productsPage.labelRemove;
                 }
+                //для отображения в счетчике при нажатии на кнопку
+                headerPage.render(products.length);
             });
         });
-
     }  
+
 }     
 const productsPage = new Products();
 productsPage.render();
