@@ -1,4 +1,5 @@
 //import { CATALOG } from './constants/catalog';
+//------------CATALOG---------------
 const CATALOG = [
     {
         id:"pr01",
@@ -44,25 +45,79 @@ const CATALOG = [
     }
 ];
 
+//-------------LocalStorage--------------
+class LocalStorageUtil{
+    constructor(){
+        this.keyName = 'products';
+    }
+
+    getProducts(){
+        const productsLocalStorage = localStorage.getItem(this.keyName);
+        if (productsLocalStorage !== null){
+            return JSON.parse(productsLocalStorage);
+        } else  {
+            return [];
+        }
+    }
+
+    putPtoducts(id){
+       let products = this.getProducts();
+       let pushProduct = false;
+       const index = products.indexOf(id);
+       if (index === -1){
+        products.push(id);
+        pushProduct = true;
+       } else {
+        products.splice(index, 1);
+       }
+       localStorage.setItem(this.keyName, JSON.stringify(products));
+       return {pushProduct, products}
+    }
+}
+//создаем экз класса
+const localStorageUtil = new LocalStorageUtil();
+//проверить метов getProducts
+console.log(localStorageUtil.getProducts());
+
+ //-------------Products--------------
 class Products{
-    
+    constructor(){
+        this.classNameActive = "products_element__btn_active";
+        this.labelAdd = "Add to Card";
+        this.labelRemove = "Remove from Card";
+    }
+
     //метод отоброжает данные на страничке в виде HTML
     render(){
+        const productsStore = localStorageUtil.getProducts();
+
         let htmlCatalog = "";
 
         //переменная доступна в константах        
         //+деструктуризация 
         CATALOG.forEach(({ id, productName, img, price, description})=>{
+            let activeClass = "";
+            let activeText = "";
+
+            if (productsStore.indexOf(id) === -1){
+                activeText = this.labelAdd;
+            } else {
+                activeClass = this.classNameActive;
+                activeText = this.labelRemove;
+            }
+
             htmlCatalog += 
             `<li class="products_element">
                 <img src="${img}" class="products_element__img"/>
                 <span class="products_element__name">${productName}</span>
                 <span class="products_element__price">${price.toLocaleString()} EUR</span>
-                <button class="products_element__btn">Add to Cart</button>
-            </li>`
-             
+                <button id = "productBtn_${id}" class="products_element__btn ${activeClass}">
+                    ${activeText}
+                </button>
+            </li>`  
         });
-
+        //onclick="productsPage.handleSetLocationStorage(this, '${id}');" 
+    
         const html = 
         `<ul class="products_container">
             ${htmlCatalog}
@@ -70,8 +125,26 @@ class Products{
         
         const ROOT_PRODUCTS = document.getElementById("products");
         ROOT_PRODUCTS.innerHTML = html;
-    }
-}
+    
+        // событие на кнопке
+        CATALOG.forEach(({ id }) => {
+            const btn = document.getElementById(`productBtn_${id}`);
+            btn.addEventListener("click", ()=> {
+                const { pushProduct, products } = localStorageUtil.putPtoducts(id);
+                if (pushProduct) {
+                    btn.classList.add(productsPage.classNameActive);
+                    btn.innerHTML = productsPage.labelAdd;
+                } else {
+                    btn.classList.remove(productsPage.classNameActive);
+                    btn.innerHTML = productsPage.labelRemove;
+                }
+            });
+        });
 
+    }  
+}     
 const productsPage = new Products();
 productsPage.render();
+
+
+

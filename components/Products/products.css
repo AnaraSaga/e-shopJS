@@ -46,6 +46,11 @@
     cursor: pointer;
 }
 .products_element__btn_active{
-    background-color: #d1a460;
-    border: 1px solid #d1a460;
+    width: 80%;
+    margin-bottom: 25px;
+    padding: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #A18A68;
+    border: 1px solid transparent;
 }
