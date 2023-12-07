@@ -1,4 +1,4 @@
-//import { CATALOG } from './constants/catalog';
+d//module.import { CATALOG } from './constants/catalog.js';
 //import {LocalStorageUtil} from ".utilits/localStorageUtils";
 
 //------------CATALOG---------------
@@ -79,7 +79,7 @@ class LocalStorageUtil{
 //создаем экз класса
 const localStorageUtil = new LocalStorageUtil();
 //проверить метов getProducts
-console.log(localStorageUtil.getProducts());
+//console.log(localStorageUtil.getProducts());
 
  //-------------Products--------------
 class Products{
@@ -147,10 +147,85 @@ class Products{
             });
         });
     }  
-
 }     
 const productsPage = new Products();
 productsPage.render();
 
+//----------Header----------------
+class Header{
+    openShoppingCart(){
+        shoppingPage.render();
+    }
+
+    render(count){
+        const html = `
+            <div class="header_container">
+                <div class="header_title">     
+                    <span>S</span>HOPPE
+                </div>   
+                <div class="header_flexbox_icons">     
+                    <img src="img/icons/search.png" class="header__icons"/>
+                    <div class="header_cart" onclick="headerPage.openShoppingCart();">
+                        <img src="img/icons/cart.png" class="header__icons"/> 
+                        <div class="header_counter">${count}</div>    
+                    </div>  
+                    <img src="img/icons/user.png" class="header__icons"/>  
+                </div>    
+            </div>`
+    
+        const ROOT_HEADER = document.getElementById("header");
+        ROOT_HEADER.innerHTML = html;
+    } 
+}    
+const headerPage = new Header();
+const productsStore = localStorageUtil.getProducts();
+headerPage.render(productsStore.length);
+
+//------------Shopping------------------
+class Shopping{
+    render(){
+        const productsStore = localStorageUtil.getProducts();
+        let htmlCatalog = "";
+        let sumCatalog = 0;
+
+        CATALOG.forEach(({ id, productName, img, price})=>{
+            if(productsStore.indexOf(id)!= -1){
+                htmlCatalog += `
+                <li class="shopping_element">
+                    <img src="${img}" class="shopping_element__img"/>
+                    <div>
+                    <span class="shopping_element__name">${productName}</span>
+                    <span class="shopping_element__price">${price.toLocaleString()}EUR</span>
+                    </div>
+                </li>
+                `;
+                sumCatalog += price;
+            }
+
+        })
 
 
+        const html = `
+            <div class="shopping_container">
+                <div class="shopping__close" onclick="closeShoppingCart">
+                    <img src="img/icons/close.png" class="shopping_close__icon" />
+                <div> 
+                </div>
+                <h4 class="shopping_title">
+                    Shopping Cart
+                </h4>
+                <ul>
+                    ${htmlCatalog}
+                </ul>
+                <div>
+                    <span class="shopping_element__name">Total: </span>
+                    <span class="shopping_element__price">${sumCatalog.toLocaleString()}EUR</span>
+                </div>    
+            </div>
+        `
+        const ROOT_SHOPPING = document.getElementById("shopping");
+        ROOT_SHOPPING.innerHTML = html;
+
+    }
+}
+const shoppingPage = new Shopping();

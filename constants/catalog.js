@@ -1,4 +1,4 @@
-// const CATALOG = [
+// export const CATALOG = [
 //     {
 //         id:"1",
 //         productName: "Lira Earings",

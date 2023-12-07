@@ -9,7 +9,8 @@
 }
 
 .header_title {
-
+    font-weight: 500;
+    font-size: 25px;
 }
 
 .header_title span {
@@ -19,14 +20,17 @@
 .header_flexbox_icons {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: nowrap;
     width: 25%;
 }
 
-.header_flexbox_info {
+.header_icons {
     
 }
 
-.header_counter{
-
+.header_cart{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
 }

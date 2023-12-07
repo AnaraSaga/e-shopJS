@@ -1,0 +1,27 @@
+.shopping_container{
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    width: 97%;
+    height: 97vh;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 16px 24px 2px rgba(33,37,41,02);
+}
+
+.shopping_container ul,ol{
+    list-style-type: none;
+}
+
+.shopping_title{
+    text-align: center;
+    margin: 8px auto;
+}
+
+.shopping_element{
+    display: grid;
+    grid-template-columns: 1fr, 0.5fr;
+}
+
+
