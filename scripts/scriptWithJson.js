@@ -4,8 +4,11 @@ function render() {
     //headerPage.render(productsStore.length);
     productsPage.render();
   }
-  
+  //spinnerPage.render();
   let CATALOG = [];
+  
+  //https://api.myjson.online/v1/records/422ca1f2-67e8-43b0-ac27-cc602a9cf6e4
+  //fetch('https://api.myjson.online/v1/records/422ca1f2-67e8-43b0-ac27-cc602a9cf6e4')
   
   fetch('server/catalog.json')
     .then(response => response.json())
@@ -152,11 +155,11 @@ class Shopping{
         productsPage.render();
     }
 
-    closeShoppingCartWithDelay() {
-        setTimeout(() => {
-            this.closeShoppingCart();
-        }, 5000); 
-    }
+    // closeShoppingCartWithDelay() {
+    //     setTimeout(() => {
+    //         this.closeShoppingCart();
+    //     }, 5000); 
+    // }
 
     updateQuantity(id, action) {
         const { products } = localStorageUtil.putPtoducts(id, action);
@@ -200,7 +203,7 @@ class Shopping{
 
         const html = `
             <div class="shopping_container">
-                <div class="shopping__close" onclick="shoppingPage.closeShoppingCartWithDelay();"></div>
+                <div class="shopping__close" onclick="shoppingPage.closeShoppingCart();"></div>
                 <h4 class="shopping_title">
                     Shopping Cart
                 </h4>
@@ -220,6 +223,24 @@ class Shopping{
     }
 }
 const shoppingPage = new Shopping();
+
+//-----------Spinner----------------
+// class Spinner{
+//     render(){
+//         const html = `
+//             <div class="spinner_element__img">
+//                 <img src="components/Spinner/spinner.svg" class="spinner_element__img" />
+//             </div>
+//         `;
+
+//         const ROOT_SPINNER = document.getElementById("spinner");
+//         ROOT_SPINNER.innerHTML = html;
+
+//     }
+
+// }
+
+// const spinnerPage = new Spinner();
 
 
   
