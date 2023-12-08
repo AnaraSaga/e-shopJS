@@ -1,4 +1,4 @@
-.header_container{
+.header_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,7 +29,7 @@
     
 }
 
-.header_cart{
+.header_cart {
     display: flex;
     flex-wrap: nowrap;
     gap: 4px;

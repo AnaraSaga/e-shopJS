@@ -59,18 +59,27 @@ class LocalStorageUtil{
         }
     }
 
-    putPtoducts(id){
+    putPtoducts(id,action){
        let products = this.getProducts();
        let pushProduct = false;
-       const index = products.indexOf(id);
-       if (index === -1){
-        products.push(id);
-        pushProduct = true;
-       } else {
-        products.splice(index, 1);
-       }
-       localStorage.setItem(this.keyName, JSON.stringify(products));
-       return {pushProduct, products}
+       let index = products.indexOf(id);
+
+       if (action === 'add' || index === -1) {
+            products.push(id);
+            pushProduct = true;
+        } else if (action === 'remove' ) {
+            products.splice(index, 1);
+        } else if (action === 'remove-all') {
+            // Удаляет все 
+            while (index !== -1) {
+                products.splice(index, 1);
+                index = products.indexOf(id);
+            }
+        } else {
+            products.splice(index, 1);
+        } 
+        localStorage.setItem(this.keyName, JSON.stringify(products));
+        return {pushProduct, products}
     }
 }
 const localStorageUtil = new LocalStorageUtil();
@@ -83,7 +92,6 @@ class Products{
         this.labelRemove = "Remove from Cart";
     }
 
-    //метод отоброжает данные на страничке в виде HTML
     render(){
         const productsStore = localStorageUtil.getProducts();
 
@@ -118,7 +126,6 @@ class Products{
         const ROOT_PRODUCTS = document.getElementById("products");
         ROOT_PRODUCTS.innerHTML = html;
     
-        // обрабатываем событие на кнопке
         CATALOG.forEach(({ id }) => {
             const btn = document.getElementById(`productBtn_${id}`);
             btn.addEventListener("click", ()=> {
@@ -130,7 +137,6 @@ class Products{
                     btn.classList.add(productsPage.classNameActive);
                     btn.innerHTML = productsPage.labelRemove;
                 }
-                //для отображения в счетчике при нажатии на кнопку
                 headerPage.render(products.length);
             });
         });
@@ -174,6 +180,13 @@ class Shopping{
     closeShoppingCart(){
         const ROOT_SHOPPING = document.getElementById("shopping");
         ROOT_SHOPPING.innerHTML = "";
+        productsPage.render();
+    }
+
+    updateQuantity(id, action) {
+        const { products } = localStorageUtil.putPtoducts(id, action);
+        this.render();
+        headerPage.render(products.length);
     }
 
     render(){
@@ -182,15 +195,25 @@ class Shopping{
         let sumCatalog = 0;
 
         CATALOG.forEach(({ id, productName, img, price})=>{
-            if(productsStore.indexOf(id)!= -1){
+            const quantity = productsStore.reduce((count, productId) => (productId === id ? count + 1 : count), 0);
+
+            if(quantity > 0){
                 htmlCatalog += `
                 <tr class="shopping_element">
                     <td class="shopping_element__img"><img src="${img}"/></td>
                     <td class="shopping_element__name">${productName}</td>
-                    <td class="shopping_element__price">${price.toLocaleString()} EUR</td>    
+                    <td class="shopping_element__price">${price.toLocaleString()} EUR</td>   
+                    <td class="shopping_element__quantity">
+                        <button onclick="shoppingPage.updateQuantity('${id}', 'remove')">-</button>
+                        <span>${quantity}</span>
+                        <button onclick="shoppingPage.updateQuantity('${id}', 'add')">+</button>
+                    </td>
+                    <td class="shopping_element__totalPrice">${(price * quantity).toLocaleString()} EUR</td>  
+
+                    <td class="shopping_element__removeAll" onclick="shoppingPage.updateQuantity('${id}', 'remove-all')"><img src="img/icons/deleteAll.png"/></td>
                 </tr>
                 `;
-                sumCatalog += price;
+                sumCatalog += price*quantity;
             }
         })
 
@@ -209,7 +232,6 @@ class Shopping{
                     </tr>  
                     </tbody>
                 </table>
-                  
             </div>
         `
         const ROOT_SHOPPING = document.getElementById("shopping");
